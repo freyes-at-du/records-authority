@@ -1,0 +1,225 @@
+<?php
+/**
+ * Copyright 2008 University of Denver--Penrose Library--University Records Management Program
+ * Author fernando.reyes@du.edu
+ * 
+ * This file is part of Records Authority.
+ * 
+ * Records Authority is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Records Authority is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Records Authority.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+?>
+
+<?php $this->load->view('includes/adminHeader'); ?>
+
+<?php 
+	echo $unitScript;
+	echo $unitRadioButtonScript;
+	echo $unitRadioButtonCheckScript;
+	echo $assocUnitsScript;
+	echo $checkAllScript;
+	echo $uncheckAllScript;
+   	echo $checkDeptScript;
+	echo $uncheckDeptScript;
+?>
+	
+	<div id="tabs">
+		<ul>
+        	<li class="ui-tabs-nav-item"><a href="#fragment-1">Retention Schedule</a></li>
+        </ul>
+       <div id="fragment-1" class="adminForm">
+       <br />
+		
+			<form id="retentionSchedule" method="post" action="<?php echo site_url();?>/retentionSchedule/save">
+			<?php 
+				// set when this form is triggered by record type form
+				if (isset($departmentID)) {
+					echo "<input name='departmentTypeID' type='hidden' value='$departmentID' />";
+				} 
+			?>
+									
+			<label for='recordName'>Record Name:&nbsp;*</label>
+			<?php  
+				if (isset($recordInformation['recordName'])) {
+					$recordName = $recordInformation['recordName'];
+					echo $recordName; 
+					echo "<input name='recordName' type='hidden' value='$recordName' class='required' />";
+				} else {
+					echo "<br /><input name='recordName' type='text' size='45' value='' class='required' />";
+				}
+			?>
+			
+			<br /><br />
+										
+			<label for='recordDescription'>Record Description:&nbsp;*</label>
+			<?php 
+				if (isset($recordInformation['recordDescription'])) {
+					$recordDescription = $recordInformation['recordDescription'];
+					echo $recordDescription; 
+					echo "<div id='hideMe'>";
+					echo "<textarea name='recordDescription' rows='3' cols='50' wrap='hard' class='required'>$recordDescription</textarea>";
+					echo "</div>";
+				} else {
+					echo "<br /><textarea name='recordDescription' rows='3' cols='50' wrap='hard' class='required'></textarea>";
+				}
+			?>
+			
+			<br /><br />
+							
+			<label for='recordCategory'>Record Category:&nbsp;*</label>
+			<?php 
+				if (isset($recordInformation['recordCategory'])) {
+					$recordCategory = $recordInformation['recordCategory']; 
+					echo $recordCategory;  
+					echo "<input name='recordCategory' type='hidden' value='$recordCategory' class='required' />";
+				} else {
+					echo "<br /><select name='recordCategory' size='1' class='required'>";
+					echo "<option value=''>Select a Record Category</option>";
+					echo "<option value=''>-----------------</option>";
+						foreach ($recordCategories as $recordCategory) {
+							echo "<option value='$recordCategory'>$recordCategory</option>";
+						}
+					echo "</select>"; 
+				}
+			?>
+			
+			<br /><br />
+			
+			<label for='retentionPeriod'>Retention Period:&nbsp;</label><br />
+			<input name="retentionPeriod" id="retentionPeriod" type="text" size="40" value="" />
+			<br /><br />
+			
+			<label for='retentionNotes'>Retention Notes:</label><br />
+			<textarea name="retentionNotes" rows="3" cols="50" wrap="hard"></textarea>
+			<br /><br />
+			
+			<label for='rmRetentionDecisions'>Rm Retention Decisions:</label><br />
+			<textarea name="retentionDecisions" rows="3" cols="50" wrap="hard"></textarea>
+			<br /><br />
+			
+			<label for='disposition'>Disposition:&nbsp;*</label><br />
+			 				
+			<p>
+				<select id='dispositions' name='disposition' size='1' class='required'> 
+				<option value='' selected='selected'>Select a disposition</option>
+				<option value=''>--------------------</option>
+				<?php
+					foreach ($dispositions as $disposition) { // $dispositionID =>
+						echo "<option value='$disposition'>$disposition</option>";
+					}
+				?>
+				</select>
+			</p>
+						
+			<div id="dispositionDetails"><!-- disposition details are rendered here --></div>
+							
+			<br />
+			<label for='primaryAuthority'>Primary Authority:</label><br />
+				<textarea name="primaryAuthority" rows="3" cols="50" wrap="hard"/></textarea><br />
+				<!-- <input name="primaryAuthority" id="primaryAuthority" type="text" size="40" value="" /><br /> -->
+			<br />
+			
+			<label for='primaryAuthorityRetention'>Primary Authority Retention:</label><br />
+			<textarea name="primaryAuthorityRetention" rows="3" cols="50" wrap="hard" /></textarea><br />
+			<!-- <input name="primaryAuthorityRetention" id="primaryAuthorityRetention" type="text" size="40" value="" /><br /> -->
+			<br /><br /><br />
+						
+			<fieldset>
+			<legend>Related Authorities</legend>
+				Related Authority:
+				<input name="relatedAuthorities[]" class="relatedAuthority" type="text" size="40" value="" /><br /><br />
+				Related Authority Retention:
+				<input name="relatedAuthorityRetention[]" class="relatedAuthorityRetention" type="text" size="40" value="" /><br /><br />
+				Related Authority:
+				<input name="relatedAuthorities[]" class="relatedAuthority" type="text" size="40" value="" /><br /><br />
+				Related Authority Retention:
+				<input name="relatedAuthorityRetention[]" class="relatedAuthorityRetention" type="text" size="40" value="" /><br /><br />
+				Related Authority:
+				<input name="relatedAuthorities[]" class="relatedAuthority" type="text" size="40" value="" /><br /><br />
+				Related Authority Retention:
+				<input name="relatedAuthorityRetention[]" class="relatedAuthorityRetention" type="text" size="40" value="" /><br /><br />
+				Related Authority:
+				<input name="relatedAuthorities[]" class="relatedAuthority" type="text" size="40" value="" /><br /><br />
+				Related Authority Retention:
+				<input name="relatedAuthorityRetention[]" class="relatedAuthorityRetention" type="text" size="40" value="" /><br /><br />
+				Related Authority:
+				<input name="relatedAuthorities[]" class="relatedAuthority" type="text" size="40" value="" /><br /><br />
+				Related Authority Retention:
+				<input name="relatedAuthorityRetention[]" class="relatedAuthorityRetention" type="text" size="40" value="" /><br /><br />
+			</fieldset>
+			<br />
+								
+			<label for='Office of Primary Responsibility'>Office of Primary Responsibility:</label>
+			
+			<p>
+				<label for='divisions'></label>
+				<select id='divisions' name='divisionID' size='1' class='required'> 
+				<option value='' selected='selected'>Select a division</option>
+				<option value=''>--------------------</option>
+				<?php 
+					foreach ($divisions as $divisionID => $divisionName) {
+						echo "<option value='$divisionID'>$divisionName</option>";
+					}
+				?>
+				</select>&nbsp;&nbsp;*
+				&nbsp;&nbsp;&nbsp;&nbsp;
+												
+				<div id="departments"></div>
+								
+			</p>
+			
+			<br />
+			<br />
+			<label for='associatedUnits'>Associated Units:</label>
+			<div id="auContainer">
+				<div id="loadingContainer">
+					<span id="loading">Loading...</span>
+					<span id="checkBox">Saving...</span>
+				</div>
+				<div id="associatedUnits">	
+					<select id='associatedUnitDivisions' name='divisionID' size='36'>
+						<option value=''>--------------------</option>
+						<?php 
+							foreach ($divisions as $divisionID => $divisionName) {
+								echo "<option value='$divisionID'>$divisionName</option>";
+							}
+						?>
+						<option value=''>--------------------</option>	
+					</select>&nbsp;&nbsp;
+				</div>				
+				<div id="associatedUnitsResults">Select a division</div> 
+			</div> 
+			
+			<br /><br />
+			
+			<label for='notes'>RM notes:&nbsp;<br /></label>
+			<textarea name="notes" rows="3" cols="50" wrap="hard"></textarea>
+			<br /><br />
+			
+			<label for='vitalRecord'>Vital Record:</label><br />
+			<input name="vitalRecord" type="radio" value="yes" />&nbsp;Yes<br />
+			<input name="vitalRecord" type="radio" value="no" checked="checked" />&nbsp;No<br />
+			<br />
+			
+			<label for='approvedByCounsel'>Approved by Counsel:&nbsp;*</label><br />
+			<input name="approvedByCounsel" type="radio" value="yes" class="required" />&nbsp;Yes<br />
+			<input name="approvedByCounsel" type="radio" value="no" class="required" checked="checked" />&nbsp;No<br />
+			
+			<br /><br />
+			<br />
+				<input name="retentionSchedule" type="submit" value="Create Retention Schedule" />&nbsp;&nbsp;
+			</form>
+			<br />
+	</div>
+</div>
+<?php $this->load->view('includes/adminFooter'); ?>
