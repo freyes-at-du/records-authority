@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "https://recordsmanagement.du.edu/recordsAuthority/";
+$config['base_url']	= "http://localhost/records-authority/";
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ $config['base_url']	= "https://recordsmanagement.du.edu/recordsAuthority/";
 |	http://example.com/
 |
 */
-$config['site_name'] = "recordsAuthority";
+$config['site_name'] = "records-authority";
 
 /*
 |--------------------------------------------------------------------------
@@ -186,7 +186,7 @@ $config['function_trigger'] = 'm';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 0;
 
 /*
 |--------------------------------------------------------------------------
@@ -332,7 +332,7 @@ $config['rewrite_short_tags'] = FALSE;
 |  sets upload directory
 |
 */
-$config['uploadDirectory'] = '/var/www/html/recordsAuthority/surveyFileUploads/';
+$config['uploadDirectory'] = '../surveyFileUploads/';
 
 
 /*
