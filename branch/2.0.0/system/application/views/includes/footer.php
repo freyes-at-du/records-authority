@@ -23,7 +23,7 @@
 ?>
 
 <div id="local-footer">
-		<p>University Records Management Program | Mary Reed Building, Room 221 | 2199 S University Blvd, Denver, CO, 80208-4822 | 303.871.3662 | <a href="http://www.du.edu/media/forms/recordsmanagement/contact_us2.html">records@du.edu</a></p>
+		<p>University Records Management Program | Mary Reed Building, Room 221 | 2199 S University Blvd, Denver, CO, 80208-4822 | 303.871.3662 | <a href="mailto:<?php echo $this->config->item('prodEmail');?>"><?php echo $this->config->item('prodEmail');?></a></p>
         <!--contact information insertion in the footer-->
 	</div>
 </div><!-- END content wrapper -->

@@ -37,7 +37,7 @@
 				<!-- Your DU ID is the 9-digit number on your DU ID card. Your passcode is the same as the one you use to log in to MyWeb or WebCentral.  For more information about the DU ID and passcode, please go here:
 				<a href="http://www.du.edu/uts/helpdesk/du-id.html" target="_blank">http://www.du.edu/uts/helpdesk/du-id.html</a>
 	 			<br /><br />-->
-				If you have questions about this survey, please contact the Records Management Program at <a href="http://www.du.edu/media/forms/recordsmanagement/contact_us2.html">records-mgmt@du.edu</a> or x13662.
+				If you have questions about this survey, please contact the Records Management Program at <a href="mailto:<?php echo $this->config->item('prodEmail');?>"><?php echo $this->config->item('prodEmail');?>;</a> or x13662.
 				<br /><br />
 				<a href="<?php $siteUrl = site_url();echo $siteUrl;?>/du/retentionSchedules">Records Authority Search</a>
 			</div>
