@@ -3,7 +3,7 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Upgrading from 1.6.1 to 1.6.2 : CodeIgniter User Guide</title>
+<title>Upgrading from 2.0.2 to 2.0.3 : CodeIgniter User Guide</title>
 
 <style type='text/css' media='all'>@import url('../userguide.css');</style>
 <link rel='stylesheet' type='text/css' media='all' href='../userguide.css' />
@@ -42,7 +42,7 @@
 <td id="breadcrumb">
 <a href="http://codeigniter.com/">CodeIgniter Home</a> &nbsp;&#8250;&nbsp;
 <a href="../index.html">User Guide Home</a> &nbsp;&#8250;&nbsp;
-Upgrading from 1.6.1 to 1.6.2
+Upgrading from 2.0.2 to 2.0.3
 </td>
 <td id="searchbox"><form method="get" action="http://www.google.com/search"><input type="hidden" name="as_sitesearch" id="as_sitesearch" value="codeigniter.com/user_guide/" />Search User Guide&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
 </tr>
@@ -55,37 +55,56 @@ Upgrading from 1.6.1 to 1.6.2
 <!-- START CONTENT -->
 <div id="content">
 
-<h1>Upgrading from 1.6.1 to 1.6.2</h1>
+<h1>Upgrading from 2.0.2 to 2.0.3</h1>
 
 <p>Before performing an update you should take your site offline by replacing the index.php file with a static one.</p>
 
 
-
 <h2>Step 1: Update your CodeIgniter files</h2>
 
-<p>Replace these files and directories in your "system" folder with the new versions:</p>
-
-<ul>
-
-<li><dfn>system/codeigniter</dfn></li>
-<li><dfn>system/database</dfn></li>
-<li><dfn>system/helpers</dfn></li>
-<li><dfn>system/language</dfn></li>
-<li><dfn>system/libraries</dfn></li>
-</ul>
+<p>Replace all files and directories in your "system" folder and replace your index.php file. If any modifications were made to your index.php they will need to be made fresh in this new one.</p>
 
 <p class="important"><strong>Note:</strong> If you have any custom developed files in these folders please make copies of them first.</p>
 
+<h2>Step 2: Update CodeIgniter files</h2>
 
-<h2>Step 2: Encryption Key</h2>
-<p>If you are using sessions, open up application/config/config.php and verify you've set an encryption key.</p>
+<p>Replace the files and directories in your "system" folder with the new versions:</p>
+	
+<h2>Step 3: Update your main index.php file</h2>
 
-<h2>Step 3: Constants File</h2>
-<p>Copy /application/config/constants.php to your installation, and modify if necessary.</p>
-<h2>Step 4: Mimes File</h2>
-<p>Replace /application/config/mimes.php with the dowloaded version. If you've added custom mime types, you'll need to re-add them.</p>
-<h2>Step 5: Update your user guide</h2>
-<p>Please also replace your local copy of the user guide with the new version.</p>
+<p>If you are running a stock <dfn>index.php</dfn> file simply replace your version with the new one.</p>
+
+<p>If your <dfn>index.php</dfn> file has internal modifications, please add your modifications to the new file and use it.</p>
+
+<h2>Step 4: Replace config/user_agents.php</h2>
+
+<p>This config file has been updated to contain more user agent types, please copy it to <kbd>application/config/user_agents.php</kbd>.</p>
+
+<h2>Step 5: Change references of the EXT constant to ".php"</h2>
+<p class="important"><strong>Note:</strong> The EXT Constant has been marked as deprecated, but has not been removed from the application.  You are encouraged to make the changes sooner rather than later.</p>
+
+<h2>Step 6: Remove APPPATH.'third_party' from autoload.php</h2>
+
+<p>Open application/autoload.php, and look for the following:</p>
+
+<code>$autoload['packages'] = array(APPPATH.'third_party');</code>
+
+<p>If you have not chosen to load any additional packages, that line can be changed to:</p>
+<code>$autoload['packages'] = array();</code>
+
+<p>Which should provide for nominal performance gains if not autoloading packages.</p>
+
+<h2>Update Sessions Database Tables</h2>
+
+<p>If you are using database sessions with the CI Session Library, please update your <samp>ci_sessions</samp> database table as follows:</p>
+
+<code>
+	CREATE INDEX last_activity_idx ON ci_sessions(last_activity);
+	ALTER TABLE ci_sessions MODIFY user_agent VARCHAR(120);
+</code>	
+	
+	
+	
 
 </div>
 <!-- END CONTENT -->
