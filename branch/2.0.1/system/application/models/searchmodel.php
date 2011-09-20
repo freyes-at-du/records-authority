@@ -344,6 +344,12 @@
 			$rc = 0; // 0 = recordCategory
 			$rn = 1; // 1 = recordName
 			
+			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
+			//$retentionScheduleResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
+			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/csv'><img src='/$siteName/images/page_csv.png' alt='Export to CSV' border='0' /></a>&nbsp;&nbsp;";
+			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/html'><img src='/$siteName/images/page_html.png' alt='Export to HTML' border='0' /></a>&nbsp;&nbsp;";
+			//$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/xml'><img src='/$siteName/images/page_xml.png' alt='Export to XML' border='0' /></a>&nbsp;&nbsp;";
+			
 			$this->db->select('recordInformationID, recordInformationDivisionID, recordTypeDepartment, recordName, recordCategory, recordDescription');
 	 		$this->db->from('rm_recordType');
 	 		if ($recordTypeDepartment != 999999) {
@@ -940,6 +946,19 @@
 			$rc = 0; // recordCategory
 			$rn = 1; // recordName
 			
+			if($keyword != '*') {
+				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
+				//$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
+				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/csv'><img src='/$siteName/images/page_csv.png' alt='Export to CSV' border='0' /></a>&nbsp;&nbsp;";
+				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/html'><img src='/$siteName/images/page_html.png' alt='Export to HTML' border='0' /></a>&nbsp;&nbsp;";
+				//$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/xml'><img src='/$siteName/images/page_xml.png' alt='Export to XML' border='0' /></a>&nbsp;&nbsp;";
+			} else {
+				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordType/999999/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
+				//$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordType/999999/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
+				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordType/999999/csv'><img src='/$siteName/images/page_csv.png' alt='Export to CSV' border='0' /></a>&nbsp;&nbsp;";
+				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordType/999999/html'><img src='/$siteName/images/page_html.png' alt='Export to HTML' border='0' /></a>&nbsp;&nbsp;";
+				//$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordType/999999/xml'><img src='/$siteName/images/page_xml.png' alt='Export to XML' border='0' /></a>&nbsp;&nbsp;";
+			}
 			
 			$globalRecordTypeResults .= "<table id='searchResultsTable'>";
 			$globalRecordTypeResults .= "<tr>"; 
