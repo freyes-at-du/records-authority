@@ -1033,6 +1033,8 @@
 				$row = $getManagementDepartmentQuery->row();
 				$rtd = str_replace('"', '""', $row->departmentName);
 			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . '</td><td valign="top" align="left">' . trim($rtd) . '</td>';	
+			} else {
+				$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . '</td><td valign="top" align="left">' . trim($rtd) . '</td>';
 			}
 			
 			if ((!isset($value['recordNotesDeptAnswer'])) OR ($value['recordNotesDeptAnswer'] == "")) {
