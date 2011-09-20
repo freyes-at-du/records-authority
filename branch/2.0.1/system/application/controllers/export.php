@@ -1001,7 +1001,7 @@
 			if ($getRecordTypeDepartmentQuery->num_rows > 0) {
 				$row = $getRecordTypeDepartmentQuery->row();
 				$rtd = str_replace('"', '""', $row->departmentName);
-			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . " - " . trim($rtd) . '</td>';	
+			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . '</td><td>' . trim($rtd) . '</td>';	
 			}
 				
 			if ((!isset($value['recordName'])) OR ($value['recordName'] == "")) {
@@ -1032,7 +1032,7 @@
 			if ($getManagementDepartmentQuery->num_rows > 0) {
 				$row = $getManagementDepartmentQuery->row();
 				$rtd = str_replace('"', '""', $row->departmentName);
-			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . " - " . trim($rtd) . '</td>';	
+			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . '</td><td>' . trim($rtd) . '</td>';	
 			}
 			
 			if ((!isset($value['recordNotesDeptAnswer'])) OR ($value['recordNotesDeptAnswer'] == "")) {
