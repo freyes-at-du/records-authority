@@ -344,6 +344,7 @@
 			$rc = 0; // 0 = recordCategory
 			$rn = 1; // 1 = recordName
 			
+			$siteName = $this->config->item('site_name');
 			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
 			//$retentionScheduleResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
 			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/csv'><img src='/$siteName/images/page_csv.png' alt='Export to CSV' border='0' /></a>&nbsp;&nbsp;";
@@ -946,6 +947,7 @@
 			$rc = 0; // recordCategory
 			$rn = 1; // recordName
 			
+			$siteName = $this->config->item('site_name');
 			if($keyword != '*') {
 				$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
 				//$globalRecordTypeResults .= "<a href='$siteUrl/export/transformRecordTypeText/$keyword/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
