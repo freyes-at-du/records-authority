@@ -110,7 +110,7 @@
 			} else {
 				$divDept = 999999;
 			}
-			$filename = "retention_schedule";
+			$filename = "record_inventory";
 			$headers = $this->generateRecordTypeHeaders($getRecordTypeQuery, $divDept);
 			$line = $this->generateRecordTypeDataRows($getRecordTypeQuery, $ids);
 														
@@ -261,7 +261,7 @@
 			$getRecordTypeQuery = $results['rtQuery'];
 			$divDept = 999999;
 			
-			$filename = "retention_schedule";
+			$filename = "record_inventory";
 			$headers = $this->generateRecordTypeHeaders($getRecordTypeQuery, $divDept);
 			$line = $this->generateRecordTypeDataRows($getRecordTypeQuery, $ids);
 														
@@ -277,24 +277,11 @@
 			}
 			
 			if ($format == "csv") {
-				$this->toCsv($getRetentionScheduleQuery,$filename);
-			}
-			
-			if ($format == "xml") {
-				$xmlHeader = $this->generateXMLHeader();
-				$xmlFooter = $this->generateXMLFooter();
-				$xmlData = $this->generateXMLDataRows($getRetentionScheduleQuery,$ids);
-				$this->toXml($xmlHeader,$xmlData,$xmlFooter,$filename);
+				$this->toCsv($getRecordTypeQuery,$filename);
 			}
 			
 			if ($format == "html") {
 				$this->toHtml($headers, $line,$filename);
-			}
-			
-			if ($format == "public") {
-				$headers = $this->generatePublicHeaders($getRetentionScheduleQuery, $divDept);
-				$line = $this->generatePublicDataRows($getRetentionScheduleQuery, $ids);
-				$this->toExcel($headers, $line,$filename);
 			}
 						
 		} else {
