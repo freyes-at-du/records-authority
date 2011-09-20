@@ -359,6 +359,14 @@
 				$recordTypeResults .= "<h2>Display All</h2>";
 			}
 
+			$siteName = $this->config->item('site_name');
+			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
+			//$retentionScheduleResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
+			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/csv'><img src='/$siteName/images/page_csv.png' alt='Export to CSV' border='0' /></a>&nbsp;&nbsp;";
+			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/html'><img src='/$siteName/images/page_html.png' alt='Export to HTML' border='0' /></a>&nbsp;&nbsp;";
+			//$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/xml'><img src='/$siteName/images/page_xml.png' alt='Export to XML' border='0' /></a>&nbsp;&nbsp;";
+			$recordTypeResults .= "</br>";
+			
 			$recordTypeResults .= "<a href=''>New Search</a>";
 			$recordTypeResults .= "<table id='searchResultsTable'>";
 			$recordTypeResults .= "<tr>";
@@ -369,12 +377,7 @@
    			$recordTypeResults .= "<th><strong>Description</strong></th>";
    			$recordTypeResults .= "</tr>";
 			
-			$siteName = $this->config->item('site_name');
-			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/excel'><img src='/$siteName/images/page_excel.png' alt='Export to Excel' border='0' /></a>&nbsp;&nbsp;";
-			//$retentionScheduleResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/pdf'><img src='/$siteName/images/page_white_acrobat.png' alt='Export to PDF' border='0' /></a>&nbsp;&nbsp;";
-			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/csv'><img src='/$siteName/images/page_csv.png' alt='Export to CSV' border='0' /></a>&nbsp;&nbsp;";
-			$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/html'><img src='/$siteName/images/page_html.png' alt='Export to HTML' border='0' /></a>&nbsp;&nbsp;";
-			//$recordTypeResults .= "<a href='$siteUrl/export/transformRecordType/$departmentID/xml'><img src='/$siteName/images/page_xml.png' alt='Export to XML' border='0' /></a>&nbsp;&nbsp;";
+
 			
 			
 			foreach ($recordTypes->result() as $results) {
