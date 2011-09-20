@@ -979,23 +979,29 @@
 		$line = "";
 		foreach ($results->result_array() as $i => $value) {
 			$line .= "<tr align='center'>";
-				
-			$getOfficeOfPrimaryResponsibilitySql = "SELECT rm_departments.departmentName " .
+			if ((!isset($value['recordInformationID'])) OR ($value['recordInformationID'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordInformationID']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}	
+			
+			$getDepartment = "SELECT rm_departments.departmentName " .
 													"FROM rm_departments " .
 													"WHERE rm_departments.departmentID = ? ";
 				
 			
 			
-			$officeOfPrimaryResponsibility = $value['officeOfPrimaryResponsibility'];
-			$getOfficePrimaryResponsibilityQuery = $this->db->query($getOfficeOfPrimaryResponsibilitySql, array($officeOfPrimaryResponsibility));
+			$recordTypeDepartment = $value['recordTypeDepartment'];
+			$getRecordTypeDepartmentQuery = $this->db->query($getDepartment, array($recordTypeDepartment));
 			
 			$this->load->model('LookUpTablesModel');
-			$divDept = $this->LookUpTablesModel->getDivision($officeOfPrimaryResponsibility);
+			$divDept = $this->LookUpTablesModel->getDivision($recordTypeDepartment);
 			
-			if ($getOfficePrimaryResponsibilityQuery->num_rows > 0) {
-				$row = $getOfficePrimaryResponsibilityQuery->row();
-				$opr = str_replace('"', '""', $row->departmentName);
-			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . " - " . trim($opr) . '</td>';	
+			if ($getRecordTypeDepartmentQuery->num_rows > 0) {
+				$row = $getRecordTypeDepartmentQuery->row();
+				$rtd = str_replace('"', '""', $row->departmentName);
+			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . " - " . trim($rtd) . '</td>';	
 			}
 				
 			if ((!isset($value['recordName'])) OR ($value['recordName'] == "")) {
@@ -1016,10 +1022,149 @@
 				$value[$i] = str_replace('"', '""', $value['recordCategory']);
 			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
 			}
-			if ((!isset($value['currentData'])) OR ($value['currentData'] == "")) {
+			
+			$managementDepartment = $value['managementDepartmentID'];
+			$getManagementDepartmentQuery = $this->db->query($getDepartment, array($managementDepartment));
+			
+			$this->load->model('LookUpTablesModel');
+			$divDept = $this->LookUpTablesModel->getDivision($managementDepartment);
+			
+			if ($getManagementDepartmentQuery->num_rows > 0) {
+				$row = $getManagementDepartmentQuery->row();
+				$rtd = str_replace('"', '""', $row->departmentName);
+			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . " - " . trim($rtd) . '</td>';	
+			}
+			
+			if ((!isset($value['recordNotesDeptAnswer'])) OR ($value['recordNotesDeptAnswer'] == "")) {
 				$line .= "<td>&nbsp</td>";
 			} else {
-				$value[$i] = str_replace('"', '""', $value['currentData']);
+				$value[$i] = str_replace('"', '""', $value['recordNotesDeptAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['recordNotesRmNotes'])) OR ($value['recordNotesRmNotes'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordNotesRmNotes']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['recordFormat'])) OR ($value['recordFormat'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordFormat']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['otherPhysicalText'])) OR ($value['otherPhysicalText'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['otherPhysicalText']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['otherElectronicText'])) OR ($value['otherElectronicText'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['otherElectronicText']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['recordStorage'])) OR ($value['recordStorage'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordStorage']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['otherDUBuildingText'])) OR ($value['otherDUBuildingText'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['otherDUBuildingText']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['otherOffsiteStorageText'])) OR ($value['otherOffsiteStorageText'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['otherOffsiteStorageText']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['otherElectronicSystemText'])) OR ($value['otherElectronicSystemText'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['otherElectronicSystemText']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['formatAndLocationDeptAnswer'])) OR ($value['formatAndLocationDeptAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['formatAndLocationDeptAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['formatAndLocationRmNotes'])) OR ($value['formatAndLocationRmNotes'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['formatAndLocationRmNotes']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['recordRetentionAnswer'])) OR ($value['recordRetentionAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordRetentionAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['usageNotesAnswer'])) OR ($value['usageNotesAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['usageNotesAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['retentionAuthoritiesAnswer'])) OR ($value['retentionAuthoritiesAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['retentionAuthoritiesAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}			
+			if ((!isset($value['vitalRecord'])) OR ($value['vitalRecord'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['vitalRecord']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['vitalRecordNotesAnswer'])) OR ($value['vitalRecordNotesAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['vitalRecordNotesAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['recordRegulations'])) OR ($value['recordRegulations'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordRegulations']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['personallyIdentifiableInformationAnswer'])) OR ($value['personallyIdentifiableInformationAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['personallyIdentifiableInformationAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['personallyIdentifiableInformationRmNotes'])) OR ($value['personallyIdentifiableInformationRmNotes'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['personallyIdentifiableInformationRmNotes']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['otherDepartmentCopiesAnswer'])) OR ($value['otherDepartmentCopiesAnswer'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['otherDepartmentCopiesAnswer']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['timestamp'])) OR ($value['timestamp'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['timestamp']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['updateTimestamp'])) OR ($value['updateTimestamp'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['updateTimestamp']);
 			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
 			}
 	
