@@ -88,6 +88,76 @@
 		} 	
 	}
 
+	/**
+	 * generates export file
+	 * 
+	 * @access public
+	 * @param $departmentID
+	 * @return void
+	 */
+ 	public function transformRecordType() {
+ 				
+ 		if ($this->uri->segment(3)) {
+			$departmentID = $this->uri->segment(3);	
+			$format = $this->uri->segment(4);
+						
+			$results = $this->getRecordTypeIDs($departmentID);
+			
+			$ids = $results['ids']; 
+			$getRecordTypeQuery = $results['rtQuery'];
+			if($departmentID != 999999) {
+				$divDept = $results['divDept'];
+			} else {
+				$divDept = 999999;
+			}
+			$filename = "retention_schedule";
+			$headers = $this->generateRecordTypeHeaders($getRecordTypeQuery, $divDept);
+			$line = $this->generateRecordTypeDataRows($getRecordTypeQuery, $ids);
+														
+			if ($format == "excel") {
+				$this->toExcel($headers, $line, $filename);
+			}
+			
+			if ($format == "pdf") {
+				$html = $headers . $line;
+				//$this->toPdf($headers, $line);
+    		
+    			$this->toPdf($html, $filename);
+			}
+			
+			if ($format == "csv") {
+				$this->toCsv($getRecordTypeQuery,$filename);
+			}
+			
+			if ($format == "xml") {
+				$xmlHeader = $this->generateXMLHeader();
+				$xmlFooter = $this->generateXMLFooter();
+				$xmlData = $this->generateXMLDataRows($getRecordTypeQuery,$ids);
+				$this->toXml($xmlHeader,$xmlData,$xmlFooter,$filename);
+			}
+			
+			if ($format == "html") {
+				$this->toHtml($headers, $line,$filename);
+			}
+			
+			if ($format == "public") {
+				$headers = $this->generatePublicHeaders($getRecordTypeQuery, $divDept);
+				$line = $this->generatePublicDataRows($getRecordTypeQuery, $ids);
+				$this->toExcel($headers, $line,$filename);
+			}
+						
+		} else {
+			echo "An error has occurred.";
+		} 	
+	}
+	
+	/**
+	 * generates export file
+	 * 
+	 * @access public
+	 * @param $auditID
+	 * @return void
+	 */
 	public function transformAudit() {
 		if ($this->uri->segment(3)) {
 			$format = $this->uri->segment(3);
@@ -285,6 +355,46 @@
 		return $results;
 	}
 	
+		/**
+	 * generates Retention Schedule Data
+	 * 
+	 * @param $departmentID
+	 * @return $results
+	 */
+	private function getRecordTypeIDs($departmentID) {
+		// get retention schedule ids
+		$this->db->select('recordInformationID');
+		$this->db->from('rm_recordType');
+		if($departmentID != 999999) {
+			$this->db->where('recordTypeDepartment', $departmentID);
+		}
+	 	$recordTypeIDs = $this->db->get();
+	 		
+	 	if ($recordTypeIDs->num_rows() > 0) {
+			// package id's in an array
+	 		$ids = array();
+			foreach ($recordTypeIDs->result() as $id) {
+				$ids[] = $id->recordInformationID;				
+			}	 		
+	 	}
+								
+	 	$this->db->select('');
+	 	$this->db->from('rm_recordType');
+		$this->db->where_in('recordInformationID', $ids);
+		$this->db->order_by('recordName', 'asc');
+		$getRecordTypeQuery = $this->db->get();	
+		
+		$this->load->model('LookUpTablesModel');
+		$divDept = $this->LookUpTablesModel->getDivision($departmentID);
+		
+		$results = array();
+		$results['ids'] = $ids;
+		$results['rtQuery'] = $getRecordTypeQuery; 
+		$results['divDept'] = $divDept;
+		
+		return $results;
+	}
+	
 	/**
 	 * generates Audit Data
 	 * 
@@ -402,6 +512,37 @@
 		     	//$headers .= "<th><strong>Related Authorities</strong>&nbsp;</th>";
 		     	//$headers .= "<th><strong>Related Authority Retentions</strong>&nbsp;</th>";
 		     	$headers .= "</tr>";
+		}
+		return $headers;	
+	}
+	
+	/**
+	 * generates Audit Headers
+	 * 
+	 * @param $results
+	 * @return $headers
+	 */
+	private function generateRecordTypeHeaders($results) {
+		// snippet based on to_excel_pi.php CI Plugin	
+		// generate headers
+		$fields = $results->field_data();
+		if ($results->num_rows() == 0) {
+			echo 'The requested record does not exist.';
+		} else {
+			$headers = "";
+		    $headers .= "<table width='100%' border='1'><tr align='center'>";
+		    
+		    foreach($fields as $field) {
+		    	$col = $field->name;
+		    	$headers .= "<th><strong>$col</strong>&nbsp;</th>";
+		    }
+		    	
+		    	/*
+		    	$headers .= "<th><strong>User</strong>&nbsp;</th>";
+		    	$headers .= "<th><strong>Date</strong>&nbsp;</th>";
+		    	$headers .= "<th><strong>Previous Data</strong>&nbsp;</th>";
+		    	$headers .= "<th><strong>Current Data</strong>&nbsp;</th>";*/
+		     $headers .= "</tr>";
 		}
 		return $headers;	
 	}
@@ -819,6 +960,69 @@
 		 	}
 		 	*/
 		//$line .='</td>';
+		$line .= "</tr>";
+					
+		} // closes foreach loop
+			
+		$line .= "</table>";
+		return $line;	
+	}
+	
+	/**
+	 * generates Retention Schedule data rows
+	 * 
+	 * @param $results
+	 * @return $line
+	 */
+	private function generateRecordTypeDataRows($results) {
+		// generate data rows
+		$line = "";
+		foreach ($results->result_array() as $i => $value) {
+			$line .= "<tr align='center'>";
+				
+			$getOfficeOfPrimaryResponsibilitySql = "SELECT rm_departments.departmentName " .
+													"FROM rm_departments " .
+													"WHERE rm_departments.departmentID = ? ";
+				
+			
+			
+			$officeOfPrimaryResponsibility = $value['officeOfPrimaryResponsibility'];
+			$getOfficePrimaryResponsibilityQuery = $this->db->query($getOfficeOfPrimaryResponsibilitySql, array($officeOfPrimaryResponsibility));
+			
+			$this->load->model('LookUpTablesModel');
+			$divDept = $this->LookUpTablesModel->getDivision($officeOfPrimaryResponsibility);
+			
+			if ($getOfficePrimaryResponsibilityQuery->num_rows > 0) {
+				$row = $getOfficePrimaryResponsibilityQuery->row();
+				$opr = str_replace('"', '""', $row->departmentName);
+			   	$line .= '<td valign="top" align="left">' . trim($divDept['divisionName']) . " - " . trim($opr) . '</td>';	
+			}
+				
+			if ((!isset($value['recordName'])) OR ($value['recordName'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordName']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['recordDescription'])) OR ($value['recordDescription'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordDescription']);
+			   	$line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['recordCategory'])) OR ($value['recordCategory'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['recordCategory']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+			if ((!isset($value['currentData'])) OR ($value['currentData'] == "")) {
+				$line .= "<td>&nbsp</td>";
+			} else {
+				$value[$i] = str_replace('"', '""', $value['currentData']);
+			    $line .= '<td valign="top">' . trim($value[$i]) . '</td>';	
+			}
+	
 		$line .= "</tr>";
 					
 		} // closes foreach loop
