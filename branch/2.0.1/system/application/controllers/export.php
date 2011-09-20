@@ -129,21 +129,8 @@
 				$this->toCsv($getRecordTypeQuery,$filename);
 			}
 			
-			if ($format == "xml") {
-				$xmlHeader = $this->generateXMLHeader();
-				$xmlFooter = $this->generateXMLFooter();
-				$xmlData = $this->generateXMLDataRows($getRecordTypeQuery,$ids);
-				$this->toXml($xmlHeader,$xmlData,$xmlFooter,$filename);
-			}
-			
 			if ($format == "html") {
 				$this->toHtml($headers, $line,$filename);
-			}
-			
-			if ($format == "public") {
-				$headers = $this->generatePublicHeaders($getRecordTypeQuery, $divDept);
-				$line = $this->generatePublicDataRows($getRecordTypeQuery, $ids);
-				$this->toExcel($headers, $line,$filename);
 			}
 						
 		} else {
