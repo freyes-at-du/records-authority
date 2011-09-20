@@ -184,11 +184,10 @@
 		} 
 	}
 	
-		/**
+	/**
 	 * generates export file
 	 * 
 	 * @access public
-	 * @param $departmentID
 	 * @return void
 	 */
  	public function transformText() {
@@ -206,6 +205,65 @@
 			$filename = "retention_schedule";
 			$headers = $this->generateHeaders($getRetentionScheduleQuery, $divDept);
 			$line = $this->generateDataRows($getRetentionScheduleQuery, $ids);
+														
+			if ($format == "excel") {
+				$this->toExcel($headers, $line, $filename);
+			}
+			
+			if ($format == "pdf") {
+				$html = $headers . $line;
+				//$this->toPdf($headers, $line);
+    		
+    			$this->toPdf($html, $filename);
+			}
+			
+			if ($format == "csv") {
+				$this->toCsv($getRetentionScheduleQuery,$filename);
+			}
+			
+			if ($format == "xml") {
+				$xmlHeader = $this->generateXMLHeader();
+				$xmlFooter = $this->generateXMLFooter();
+				$xmlData = $this->generateXMLDataRows($getRetentionScheduleQuery,$ids);
+				$this->toXml($xmlHeader,$xmlData,$xmlFooter,$filename);
+			}
+			
+			if ($format == "html") {
+				$this->toHtml($headers, $line,$filename);
+			}
+			
+			if ($format == "public") {
+				$headers = $this->generatePublicHeaders($getRetentionScheduleQuery, $divDept);
+				$line = $this->generatePublicDataRows($getRetentionScheduleQuery, $ids);
+				$this->toExcel($headers, $line,$filename);
+			}
+						
+		} else {
+			echo "An error has occurred.";
+		} 	
+	}
+	
+	/**
+	 * generates export file
+	 * 
+	 * @access public
+	 * @return void
+	 */
+ 	public function transformRecordTypeText() {
+ 				
+ 		if ($this->uri->segment(3)) {
+			$keyword = $this->uri->segment(3);	
+			$format = $this->uri->segment(4);
+						
+			$results = $this->getRecordTypeKeywordIDs($keyword);
+			
+			$ids = $results['ids']; 
+			$getRecordTypeQuery = $results['rtQuery'];
+			$divDept = 999999;
+			
+			$filename = "retention_schedule";
+			$headers = $this->generateRecordTypeHeaders($getRecordTypeQuery, $divDept);
+			$line = $this->generateRecordTypeDataRows($getRecordTypeQuery, $ids);
 														
 			if ($format == "excel") {
 				$this->toExcel($headers, $line, $filename);
@@ -373,6 +431,73 @@
 		
 		$this->load->model('LookUpTablesModel');
 		$divDept = $this->LookUpTablesModel->getDivision($departmentID);
+		
+		$results = array();
+		$results['ids'] = $ids;
+		$results['rtQuery'] = $getRecordTypeQuery; 
+		$results['divDept'] = $divDept;
+		
+		return $results;
+	}
+	
+	/**
+	 * generates Record Type Data
+	 * 
+	 * @param $departmentID
+	 * @return $results
+	 */
+	private function getRecordTypeKeywordIDs($keyword) {
+		// get retention schedule ids
+		$this->db->select('recordInformationID');
+	 	$this->db->from('rm_recordType');
+	 	//Check for Search all with *
+	 	if($keyword != '*') {
+		 	$this->db->where('MATCH(
+						 		recordDescription, 
+						 		recordNotesDeptAnswer, 
+						 		recordNotesRmNotes, 
+						 		otherPhysicalText, 
+						 		otherElectronicText, 
+						 		otherDUBuildingText, 
+						 		otherOffsiteStorageText, 
+						 		otherElectronicSystemText, 
+						 		formatAndLocationDeptAnswer, 
+						 		formatAndLocationRmNotes, 
+						 		usageNotesAnswer, 
+						 		retentionAuthoritiesAnswer, 
+						 		vitalRecordNotesAnswer, 
+						 		personallyIdentifiableInformationAnswer, 
+						 		personallyIdentifiableInformationRmNotes, 
+						 		otherDepartmentCopiesAnswer) 
+						 		AGAINST ("*' . $keyword . '*" IN BOOLEAN MODE) 
+						 			OR MATCH(
+						 				recordName, 
+						 				recordCategory, 
+						 				recordFormat, 
+						 				recordStorage, 
+						 				vitalRecord, 
+						 				recordRegulations,
+						 				recordRetentionAnswer) 
+						 				AGAINST ("*' . $keyword . '*" IN BOOLEAN MODE)');
+	 	}
+	 	$recordInformationIDs = $this->db->get();
+	 		
+	 	if ($recordInformationIDs->num_rows() > 0) {
+			// package id's in an array
+	 		$ids = array();
+			foreach ($recordInformationIDs->result() as $id) {
+				$ids[] = $id->recordInformationID;				
+			}	 		
+	 	}
+								
+	 	$this->db->select('*');
+	 	$this->db->from('rm_recordType');
+		$this->db->where_in('recordInformationID', $ids);
+		$this->db->order_by('recordName', 'asc');
+		$getRecordTypeQuery = $this->db->get();	
+		
+		$this->load->model('LookUpTablesModel');
+		$divDept = $this->LookUpTablesModel->getDivision(999999);
 		
 		$results = array();
 		$results['ids'] = $ids;
