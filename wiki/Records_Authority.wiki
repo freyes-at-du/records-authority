@@ -1,4 +1,4 @@
-=Introduction=
+=Records Authority=
 
 The Records Authority (RA) is an open-source toolkit that provides all the basic capabilities needed to build and maintain a web-accessible retention schedule.  With RA it is possible to build a schedule from records inventory data, or by loading pre-existing retention information. 
 
