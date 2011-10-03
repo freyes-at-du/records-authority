@@ -41,7 +41,7 @@
   *   Login to mysql with *mysql –u''”username” ''–p”password”*
   *   Enter the command *create database recordsManagementDB*
   * Enter the command *quit*
-  * Enter the command *mysql –u''”username” ''–p”password” recordsManagementDB &lt; ra_schema.sql*
+  * Enter the command *mysql –u''”username” –p ”password” recordsManagementDB ra_schema.sql*
   * The database is now setup
  * ===Codeigniter Configuration===
   * browse to */recordsAuthority/system/application/config/*
