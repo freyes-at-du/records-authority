@@ -38,7 +38,7 @@
   *   Install MySQL
   *   Extract the contents into your root web folder(e.g.*/var/www/html*)
   *   You will prompted to enter your password, after press *Enter*.  Solr is now running
-  *   Login to mysql with *mysql –u''”username” ''–p”password”*
+  *   Login to mysql with *mysql –u ”username” –p ”password”*
   *   Enter the command *create database recordsManagementDB*
   * Enter the command *quit*
   * Enter the command *mysql –u''”username” –p ”password” recordsManagementDB ra_schema.sql*
