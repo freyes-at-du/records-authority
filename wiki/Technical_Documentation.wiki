@@ -10,6 +10,7 @@
   *   Redhat Linux
   *   Ubuntu
   *   Apple OS X 10.6
+  *   Windows 7
  * ===Software Requirements===
   *   Apache
   *   MySQL
