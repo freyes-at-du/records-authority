@@ -14,15 +14,16 @@
   *   Apache
   *   MySQL
   *   PHP 5.2
-  *   Jetty (included)
-  *   Solr (included)
+  *   Jetty [http://jetty.codehaus.org/jetty/]
+  *   Solr [http://lucene.apache.org/solr/]
  * ===Recommended Software===
-  *   MAMP - For apple users
-  *   phpMyAdmin - MySQL web interface
+  *   MAMP - For Apple users [http://www.mamp.info/en/index.html]
+  *   phpMyAdmin - MySQL web interface [http://www.phpmyadmin.net/home_page/index.php]
+  *   WAMP - For Windows users [http://www.wampserver.com/en/]
 ==Installation==
  * ===Macintosh – Using MAMP===
   *   Download and install MAMP
-  *   Download the latest version of Records Authority
+  *   Download the latest version of Records Authority 
   *   Extract the contents into your root web folder (e.g. */Applications/MAMP/htdocs/*)
   *   Move the folder *jetty-6.1.22 *in the recordsAuthority folder to */opt/jetty-6.1.22/*
   *   Go to */opt/jetty-6.1.22/* and enter the command "*sudo sh startJetty.sh*"
