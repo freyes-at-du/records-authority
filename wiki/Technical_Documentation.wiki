@@ -45,6 +45,17 @@
   * Enter the command *quit*
   * Enter the command *mysql –u''”username” –p ”password” recordsManagementDB ra_schema.sql*
   * The database is now setup
+ * ===Windows 7===
+  * Install WAMP
+  * Download the latest version of Records Authority 
+  * Extract recordsAuthority into the WAMP "www" folder (e.g. *c:/wamp/www/*)
+  * Move the folder jetty-6.1.22 to *c:/jetty/*
+  * goto *c:/jetty/bin/* and run *Jetty-Service.exe*
+  * Access your phpMyAdmin web interface from WAMP
+  * Create a database called *recordsManagementDB*
+  * Select this database then click *Import*
+  * Browse to */recordsAuthority/ra_schema.sql/ *and click *Go*
+  * The database is now set up
  * ===Codeigniter Configuration===
   * browse to */recordsAuthority/system/application/config/*
   * Edit the file *config.php* - This file contains many useful things such as site name,  site email,  and session handling
