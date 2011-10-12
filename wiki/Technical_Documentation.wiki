@@ -49,8 +49,8 @@
   * Install WAMP
   * Download the latest version of Records Authority 
   * Extract recordsAuthority into the WAMP "www" folder (e.g. *c:/wamp/www/*)
-  * Move the folder jetty-6.1.22 to *c:/jetty/*
-  * goto *c:/jetty/bin/* and run *Jetty-Service.exe*
+  * Move the folder jetty-6.1.22 to *c:/jetty-6.1.22/*
+  * goto *c:/jetty-6.1.22/bin/* and run *Jetty-Service.exe*
   * Access your phpMyAdmin web interface from WAMP
   * Create a database called *recordsManagementDB*
   * Select this database then click *Import*
