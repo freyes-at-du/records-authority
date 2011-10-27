@@ -25,7 +25,7 @@ class ImportModel extends CI_Model {
 	}
 
 	/**
-	 * Parses data from csv file and imports it to the Retion Schedule
+	 * Parses data from csv file and imports it to the Retention Schedule
 	 * 
 	 * @access public
 	 * @param $filePath
@@ -91,6 +91,173 @@ class ImportModel extends CI_Model {
 		}
 	
 	}
+	
+	/**
+	 * Parses data from csv file and imports it to the Division
+	 * 
+	 * @access public
+	 * @param $filePath
+	 * @return $result
+	 */
+	public function csvDivImport($filePath) {
+		$this->load->model('LookUpTablesModel');
+		
+		//open file
+		ini_set('auto_detect_line_endings',TRUE);
+		$fh = fopen($filePath, "r");
+		$result = "";
+		
+		$this->db->select_max('divisionID');
+		$iteratorDiv = $this->db->get('rm_divisions');
+		$this->db->select_max('departmentID');
+		$iteratorDep = $this->db->get('rm_departments');
+		
+		$importDiv = array();
+		$importDep = array();
+		
+		//create division import array
+		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
+			if(isset($info[0]) && $info[0] != "") {
+				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
+				foreach($divisionQuery as $division) {
+					if($division = "") {
+						$divisions  = array(
+							'divisionName'		=> 	$info[0],
+							'divisionID'		=>	$iteratorDiv,
+						);
+						$importDiv[$iteratorDiv] = $divisions;
+						$iteratorDiv += 1;
+					} else {
+						$result .= "Division: " . $info[0] . " exists";
+					}
+				}
+			}
+		}
+		
+		//insert division array
+		foreach($importDiv as $import) {
+			$this->db->select('divisionName');
+			$this->db->from('rm_divisions');
+			$this->db->where('divisionName', $import['divisionName']);
+			$nameCheck = $this->db->get();
+			if($nameCheck->num_rows() > 0) {
+				foreach($nameCheck->result() as $row) {
+					$result .= "Duplicate Division " . $row->divisionName . br();
+					$error = "Duplicate Division " . $row->divisionName;
+					log_message('info',$error);
+				}
+			} else {
+				$this->db->insert('rm_divisions', $import);
+				$result .= "Inserted " . $import['DivisionName'] . br();
+			}
+		}
+		
+		//create department import array
+		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
+			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
+				$departmentQuery = $this->LookupTablesModel->getDepartmentByName($info[1]);
+				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
+				
+				foreach($departmentQuery as $department) {
+					if($department = "") {
+						foreach($divisionQuery as $division) {
+							$departments = array(
+								'departmentName'	=>	$info[1],
+								'divisionID'		=>	$division['divisionID'],
+								'departmentID'		=>	$iteratorDep,
+							);
+						}
+						$importDep[$iteratorDep] = $departments;
+						$iteratorDep += 1;
+					} else {
+						$result .= "Department: " . $info[1] . " exists in: " . $info[0];
+					}
+				}
+			}
+		}
+		
+		//insert department array
+		foreach($importDep as $import) {
+			$this->db->select('departmentName');
+			$this->db->from('rm_departments');
+			$this->db->where('departmentName', $import['departmentName']);
+			$nameCheck = $this->db->get();
+			if($nameCheck->num_rows() > 0) {
+				foreach($nameCheck->result() as $row) {
+					$result .= "Duplicate Department " . $row->departmentName . br();
+					$error = "Duplicate Department " . $row->departmentName;
+					log_message('info',$error);
+				}
+			} else {
+				$this->db->insert('rm_departments', $import);
+				$result .= "Inserted " . $import['departmentName'] . br();
+			}
+		}
+		//close file
+		fclose($fh);
+		if($result == "") {
+			$result = "Import CSV was faulty!  Check for line breaks and extra commas.";
+			return $result;
+		} else {
+			return $result;
+		}
+	
+	}
+	
+	/**
+	 * Parses data from csv file and imports it to the Departments
+	 * 
+	 * @access public
+	 * @param $filePath,$divisionName
+	 * @return $result
+	 */
+	public function csvDepImport($filePath,$divisionID) {
+		//open file
+		ini_set('auto_detect_line_endings',TRUE);
+		$fh = fopen($filePath, "r");
+		$result = "";
+	
+		$iterator = 0;
+		$importData = array();
+		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
+			//check to see if record name or record code is blank
+			if(isset($info[1]) && isset($info[2]) && $info[1] != "" && $info[2] != "") {
+				$import = array(
+					'divisionID'					=>	$divisionID,
+					'departmentName' 				=> 	$info[0],
+				);
+				$importData[$iterator] = $import;
+				$iterator += 1;
+			}
+		}
+		
+		foreach($importData as $import) {
+			$this->db->select('departmentName');
+			$this->db->from('rm_departments');
+			$this->db->where('departmentName', $import['departmentName']);
+			$nameCheck = $this->db->get();
+			if($nameCheck->num_rows() > 0) {
+				foreach($nameCheck->result() as $row) {
+					$result .= "Duplicate Department " . $row->divisionName . br();
+					$error = "Duplicate Department " . $row->divisionName;
+					log_message('info',$error);
+				}
+			} else {
+				$this->db->insert('rm_divisions', $import);
+				$result .= "Inserted " . $import['DivisionName'] . br();
+			}
+		}
+		//close file
+		fclose($fh);
+		if($result == "") {
+			$result = "Import CSV was faulty!  Check for line breaks and extra commas.";
+			return $result;
+		} else {
+			return $result;
+		}
+	
+	}
+	
 
 	/**
     * gets files in the upload directory
