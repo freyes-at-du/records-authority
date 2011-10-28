@@ -150,7 +150,7 @@ class ImportModel extends CI_Model {
 					log_message('info',$error);
 				}
 			} else {
-				//$this->db->insert('rm_divisions', $import);
+				$this->db->insert('rm_divisions', $import);
 				$result .= "Inserted: " . $import['divisionName'] . br();
 			}
 		}
