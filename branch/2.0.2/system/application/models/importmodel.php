@@ -145,13 +145,13 @@ class ImportModel extends CI_Model {
 			$nameCheck = $this->db->get();
 			if($nameCheck->num_rows() > 0) {
 				foreach($nameCheck->result() as $row) {
-					$result .= "Duplicate Division " . $row->divisionName . br();
-					$error = "Duplicate Division " . $row->divisionName;
+					$result .= "Duplicate Division: " . $row->divisionName . br();
+					$error = "Duplicate Division: " . $row->divisionName;
 					log_message('info',$error);
 				}
 			} else {
 				//$this->db->insert('rm_divisions', $import);
-				$result .= "Inserted " . $import['divisionName'] . br();
+				$result .= "Inserted: " . $import['divisionName'] . br();
 			}
 		}
 		
