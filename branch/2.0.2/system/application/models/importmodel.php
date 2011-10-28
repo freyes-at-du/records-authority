@@ -131,7 +131,6 @@ class ImportModel extends CI_Model {
 			if(isset($info[0]) && $info[0] != "") {
 				$divisions  = array(
 					'divisionName'		=> 	$info[0],
-					'divisionID'		=>	$iteratorDiv,
 				);
 				$importDiv[$iteratorDiv] = $divisions;
 				$iteratorDiv += 1;
