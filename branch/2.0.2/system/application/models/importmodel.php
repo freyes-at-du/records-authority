@@ -111,6 +111,7 @@ class ImportModel extends CI_Model {
 		$queryDiv = $this->db->get('rm_divisions');
 		foreach($queryDiv->result() as $row) {
 			$iteratorDiv = $row->divisionID;
+			echo "Division Iterator Start: " . $iteratorDiv . br();
 		}
 		
 		
@@ -118,6 +119,7 @@ class ImportModel extends CI_Model {
 		$queryDep = $this->db->get('rm_departments');
 		foreach($queryDep->result() as $row) {
 			$iteratorDep = $row->departmentID;
+			echo "Department Iterator Start: " . $iteratorDep . br();
 		}
 		
 		$importDiv = array();
@@ -134,6 +136,9 @@ class ImportModel extends CI_Model {
 				$iteratorDiv += 1;
 			}
 		}
+		echo "Import Division Array: " . br();
+		print_r($importDiv);
+		echo "End Division Array"
 		
 		//insert division array
 		foreach($importDiv as $import) {
