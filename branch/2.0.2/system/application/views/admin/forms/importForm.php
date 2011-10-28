@@ -49,6 +49,7 @@
     		echo form_open('/import/importCSV', $attributes);
 
 			echo "<select id='files' name='fileName' size='1' class='required'>";
+			echo "<input type='hidden' name='importType' value='retentionSchedule'>";
 			echo "<option value='' selected='selected'>Select your file</option>";
 			echo "<option value=''>--------------------</option>";
 		
@@ -61,6 +62,40 @@
 			echo br(2);
 			$js = "onClick='return confirm(\"Are you sure you want to IMPORT these records?\")'";
 			echo form_submit('importRetentionSchedules','Import Retention Schedules',$js) . "*";
+			echo br(2);
+			echo form_close();
+			if(isset($error)) {
+				echo $error;
+			}
+		?>
+		<br/><br/>
+ 
+   		<h4>*** Delete Header Row before conversion to CSV format ***</h4>
+   		<table border=2>
+   			<tr><td>Division Name</td><td>Department Name</td></tr>
+   			<tr><td>-----</td><td>-----</td></tr>
+   		</table>
+
+    	<?php
+    		echo br(3);
+    		$attributes = array('id' => 'importDivisionsAndDepartments');
+    		
+    		echo form_open('/import/importCSV', $attributes);
+
+			echo "<select id='files' name='fileName' size='1' class='required'>";
+			echo "<input type='hidden' name='importType' value='divisionAndDepartment'>";
+			echo "<option value='' selected='selected'>Select your file</option>";
+			echo "<option value=''>--------------------</option>";
+		
+			foreach($files as $fileID => $fileName) {
+				echo "<option value='$fileName'>$fileName</option>";
+			}
+				
+			echo "</select>";
+			
+			echo br(2);
+			$js = "onClick='return confirm(\"Are you sure you want to IMPORT these divisions and departments?\")'";
+			echo form_submit('importDivisionsAndDepartments','Import Divisions and Departments',$js) . "*";
 			echo br(2);
 			echo form_close();
 			if(isset($error)) {

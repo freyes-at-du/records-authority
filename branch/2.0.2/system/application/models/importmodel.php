@@ -118,19 +118,12 @@ class ImportModel extends CI_Model {
 		//create division import array
 		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
 			if(isset($info[0]) && $info[0] != "") {
-				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
-				foreach($divisionQuery as $division) {
-					if($division = "") {
-						$divisions  = array(
-							'divisionName'		=> 	$info[0],
-							'divisionID'		=>	$iteratorDiv,
-						);
-						$importDiv[$iteratorDiv] = $divisions;
-						$iteratorDiv += 1;
-					} else {
-						$result .= "Division: " . $info[0] . " exists";
-					}
-				}
+				$divisions  = array(
+					'divisionName'		=> 	$info[0],
+					'divisionID'		=>	$iteratorDiv,
+				);
+				$importDiv[$iteratorDiv] = $divisions;
+				$iteratorDiv += 1;
 			}
 		}
 		
@@ -147,7 +140,7 @@ class ImportModel extends CI_Model {
 					log_message('info',$error);
 				}
 			} else {
-				$this->db->insert('rm_divisions', $import);
+				//$this->db->insert('rm_divisions', $import);
 				$result .= "Inserted " . $import['DivisionName'] . br();
 			}
 		}
@@ -155,23 +148,17 @@ class ImportModel extends CI_Model {
 		//create department import array
 		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
 			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
-				$departmentQuery = $this->LookupTablesModel->getDepartmentByName($info[1]);
 				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
-				
-				foreach($departmentQuery as $department) {
-					if($department = "") {
-						foreach($divisionQuery as $division) {
-							$departments = array(
-								'departmentName'	=>	$info[1],
-								'divisionID'		=>	$division['divisionID'],
-								'departmentID'		=>	$iteratorDep,
-							);
-						}
-						$importDep[$iteratorDep] = $departments;
-						$iteratorDep += 1;
-					} else {
-						$result .= "Department: " . $info[1] . " exists in: " . $info[0];
+				if($department = "") {
+					foreach($divisionQuery as $division) {
+						$departments = array(
+							'departmentName'	=>	$info[1],
+							'divisionID'		=>	$division['divisionID'],
+							'departmentID'		=>	$iteratorDep,
+						);
 					}
+					$importDep[$iteratorDep] = $departments;
+					$iteratorDep += 1;
 				}
 			}
 		}
@@ -189,7 +176,7 @@ class ImportModel extends CI_Model {
 					log_message('info',$error);
 				}
 			} else {
-				$this->db->insert('rm_departments', $import);
+				//$this->db->insert('rm_departments', $import);
 				$result .= "Inserted " . $import['departmentName'] . br();
 			}
 		}
@@ -201,7 +188,6 @@ class ImportModel extends CI_Model {
 		} else {
 			return $result;
 		}
-	
 	}
 	
 	/**
@@ -212,39 +198,56 @@ class ImportModel extends CI_Model {
 	 * @return $result
 	 */
 	public function csvDepImport($filePath,$divisionID) {
+		$this->load->model('LookUpTablesModel');
+		
+		//open file
+		ini_set('auto_detect_line_endings',TRUE);
+		$fh = fopen($filePath, "r");
+		$result = "";$this->load->model('LookUpTablesModel');
+		
 		//open file
 		ini_set('auto_detect_line_endings',TRUE);
 		$fh = fopen($filePath, "r");
 		$result = "";
-	
-		$iterator = 0;
-		$importData = array();
+		
+		$this->db->select_max('departmentID');
+		$iteratorDep = $this->db->get('rm_departments');
+		
+		$importDep = array();
+		
+		//create department import array
 		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
-			//check to see if record name or record code is blank
-			if(isset($info[1]) && isset($info[2]) && $info[1] != "" && $info[2] != "") {
-				$import = array(
-					'divisionID'					=>	$divisionID,
-					'departmentName' 				=> 	$info[0],
-				);
-				$importData[$iterator] = $import;
-				$iterator += 1;
+			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
+				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
+				if($department = "") {
+					foreach($divisionQuery as $division) {
+						$departments = array(
+							'departmentName'	=>	$info[1],
+							'divisionID'		=>	$divisionID,
+							'departmentID'		=>	$iteratorDep,
+						);
+					}
+					$importDep[$iteratorDep] = $departments;
+					$iteratorDep += 1;
+				}
 			}
 		}
 		
-		foreach($importData as $import) {
+		//insert department array
+		foreach($importDep as $import) {
 			$this->db->select('departmentName');
 			$this->db->from('rm_departments');
 			$this->db->where('departmentName', $import['departmentName']);
 			$nameCheck = $this->db->get();
 			if($nameCheck->num_rows() > 0) {
 				foreach($nameCheck->result() as $row) {
-					$result .= "Duplicate Department " . $row->divisionName . br();
-					$error = "Duplicate Department " . $row->divisionName;
+					$result .= "Duplicate Department " . $row->departmentName . br();
+					$error = "Duplicate Department " . $row->departmentName;
 					log_message('info',$error);
 				}
 			} else {
-				$this->db->insert('rm_divisions', $import);
-				$result .= "Inserted " . $import['DivisionName'] . br();
+				//$this->db->insert('rm_departments', $import);
+				$result .= "Inserted " . $import['departmentName'] . br();
 			}
 		}
 		//close file
@@ -255,7 +258,6 @@ class ImportModel extends CI_Model {
 		} else {
 			return $result;
 		}
-	
 	}
 	
 
