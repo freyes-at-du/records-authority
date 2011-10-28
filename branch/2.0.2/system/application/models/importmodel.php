@@ -136,9 +136,9 @@ class ImportModel extends CI_Model {
 				$iteratorDiv += 1;
 			}
 		}
-		//echo "Import Division Array: " . br();
-		//print_r($importDiv);
-		//echo "End Division Array"
+		$results .= "Import Division Array: " . br();
+		print_r($importDiv);
+		$results .= echo "End Division Array"
 		
 		//insert division array
 		foreach($importDiv as $import) {
