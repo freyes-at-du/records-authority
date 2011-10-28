@@ -108,9 +108,11 @@ class ImportModel extends CI_Model {
 		$result = "";
 		
 		$this->db->select_max('divisionID');
-		$iteratorDiv = $this->db->get('rm_divisions');
+		$queryDiv = $this->db->get('rm_divisions');
+		$iteratorDiv = $queryDiv->result();
 		$this->db->select_max('departmentID');
-		$iteratorDep = $this->db->get('rm_departments');
+		$queryDep = $this->db->get('rm_departments');
+		$iteratorDep = $queryDep->result();
 		
 		$importDiv = array();
 		$importDep = array();
