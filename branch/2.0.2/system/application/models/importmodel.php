@@ -107,20 +107,21 @@ class ImportModel extends CI_Model {
 		$fh = fopen($filePath, "r");
 		$result = "";
 		
-		$this->db->select_max('divisionID');
+		$iteratorDiv = 0;
+		/*$this->db->select_max('divisionID');
 		$queryDiv = $this->db->get('rm_divisions');
 		foreach($queryDiv->result() as $row) {
 			$iteratorDiv = $row->divisionID;
 			echo $iteratorDiv . br();
-		}
+		}*/
 		
-		
-		$this->db->select_max('departmentID');
+		$iteratorDep = 0;
+		/*$this->db->select_max('departmentID');
 		$queryDep = $this->db->get('rm_departments');
 		foreach($queryDep->result() as $row) {
 			$iteratorDep = $row->departmentID;
 			echo $iteratorDep . br();
-		}
+		}*/
 		
 		$importDiv = array();
 		$importDep = array();
@@ -151,7 +152,7 @@ class ImportModel extends CI_Model {
 				}
 			} else {
 				//$this->db->insert('rm_divisions', $import);
-				$result .= "Inserted " . $import['DivisionName'] . br();
+				$result .= "Inserted " . $import['divisionName'] . br();
 			}
 		}
 		
