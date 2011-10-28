@@ -137,7 +137,7 @@ class ImportModel extends CI_Model {
 			}
 		}
 		$results .= "Import Division Array: " . br();
-		print_r($importDiv);
+		$results .= print_r($importDiv);
 		$results .= echo "End Division Array"
 		
 		//insert division array
