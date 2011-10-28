@@ -47,9 +47,9 @@
     		$attributes = array('id' => 'importRetentionSchedules');
     		
     		echo form_open('/import/importCSV', $attributes);
-
-			echo "<select id='files' name='fileName' size='1' class='required'>";
+			
 			echo "<input type='hidden' name='importType' value='retentionSchedule'>";
+			echo "<select id='files' name='fileName' size='1' class='required'>";
 			echo "<option value='' selected='selected'>Select your file</option>";
 			echo "<option value=''>--------------------</option>";
 		
@@ -81,9 +81,8 @@
     		$attributes = array('id' => 'importDivisionsAndDepartments');
     		
     		echo form_open('/import/importCSV', $attributes);
-
-			echo "<select id='files' name='fileName' size='1' class='required'>";
 			echo "<input type='hidden' name='importType' value='divisionAndDepartment'>";
+			echo "<select id='files' name='fileName' size='1' class='required'>";
 			echo "<option value='' selected='selected'>Select your file</option>";
 			echo "<option value=''>--------------------</option>";
 		
