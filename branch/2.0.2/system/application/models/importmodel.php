@@ -154,7 +154,9 @@ class ImportModel extends CI_Model {
 				$result .= "Inserted: " . $import['divisionName'] . br();
 			}
 		}
-		
+		//close file
+		fclose($fh);
+		$fh = fopen($filePath, "r");
 		//create department import array
 		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
 			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
