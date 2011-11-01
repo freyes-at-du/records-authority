@@ -188,7 +188,7 @@ class ImportModel extends CI_Model {
 					log_message('info',$error);
 				}
 			} else {
-				//$this->db->insert('rm_departments', $import);
+				$this->db->insert('rm_departments', $import);
 				$result .= "Inserted " . $import['departmentName'] . br();
 			}
 		}
