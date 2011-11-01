@@ -257,6 +257,7 @@ class LookUpTablesModel extends CI_Model
 		$this->db->from('rm_divisions');
 		$this->db->where('divisionName', $divisionName);
 		$divisionByNameQuery = $this->db->get();
+		return $divisionByNameQuery;
 	}
 	
 	/**
@@ -320,6 +321,7 @@ class LookUpTablesModel extends CI_Model
 		$this->db->from('rm_departments');
 		$this->db->where('departmentName', $departmentName);
 		$departmentQuery = $this->db->get();
+		return $departmentQuery;
 	}
 	
 	/**
