@@ -161,6 +161,7 @@ class ImportModel extends CI_Model {
 		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
 			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
 				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
+				print_r($divisionQuery);
 				foreach($divisionQuery as $division) {
 					if($division['divisionID'] != "") {
 						$departments = array(
