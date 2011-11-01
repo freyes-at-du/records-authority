@@ -160,22 +160,18 @@ class ImportModel extends CI_Model {
 		//create department import array
 		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
 			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
-				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
-				foreach($divisionQuery as $division) {
-					if($division['divisionID'] != "") {
-						$departments = array(
-							'departmentName'	=>	$info[1],
-							'divisionID'		=>	$division['divisionID'],
-							'departmentID'		=>	$iteratorDep,
-						);
-					$importDep[$iteratorDep] = $departments;
-					$iteratorDep += 1;
-					} else {
-						$result .= "Division for: " . $info[1] . " did not exist, skipping.";
-					}
+				$divisionID = $this->LookUpTablesModel->getDivisionID($info[0]);
+				if($divisionID != "") {
+					$departments = array(
+						'departmentName'	=>	$info[1],
+						'divisionID'		=>	$divisionID,
+						'departmentID'		=>	$iteratorDep,
+					);
+				$importDep[$iteratorDep] = $departments;
+				$iteratorDep += 1;
+				} else {
+					$result .= "Division for: " . $info[1] . " did not exist, skipping.";
 				}
-			} else {
-				$result .= "CSV Departments empty";
 			}
 		}
 		

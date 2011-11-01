@@ -233,31 +233,38 @@ class LookUpTablesModel extends CI_Model
 	}
 	
 	/**
-    * invokes getDivisioByNamenQuery()
+    * invokes getDivisionID()
     * 
     * @access public 
-    * @param $departmentID
+    * @param $divisionName
     * @return $division
     */
-	public function getDivisionByName($divisionName) {
-		$division = $this->getDivisionByNameQuery($divisionName);
+	public function getDivisionID($divisionName) {
+		$division = $this->getDivisionIDQuery($divisionName);
 		return $division;
 	}
 	
 	/**
-    * gets division and department names
+    * gets division ID
     * used by admin forms
     * 
     * @access private 
     * @param $divisionName
-    * @return $divisionByNameQuery
+    * @return $division
     */
-	private function getDivisionByNameQuery($divisionName) {
-		$this->db->select('divisionID, divisionName');
+	private function getDivisionIDQuery($divisionName) {
+		$this->db->select('divisionID');
 		$this->db->from('rm_divisions');
 		$this->db->where('divisionName', $divisionName);
-		$divisionByNameQuery = $this->db->get();
-		return $divisionByNameQuery;
+		
+		$divisionQuery = $this->db->get();
+		
+		if ($divisionQuery->num_rows() > 0) {
+			$result = $divisionQuery->row();
+			$division = $result->divisionID;  
+			
+			return $division;
+		}
 	}
 	
 	/**
@@ -297,31 +304,38 @@ class LookUpTablesModel extends CI_Model
 	}
 	
 	/**
-    * invokes getDepartmentByNameQuery()
+    * invokes getDepartmentID()
     * 
     * @access public 
-    * @param $departmentName
-    * @return $department
+    * @param $divisionName
+    * @return $division
     */
-	public function getDepartmentByName($departmentName) {
-		$department = $this->getDepartmentByNameQuery($departmentName);
+	public function getDepartmentID($departmentName) {
+		$department = $this->getDepartmentIDQuery($departmentName);
 		return $department;
 	}
 	
 	/**
-    * gets department name
+    * gets division ID
     * used by admin forms
     * 
     * @access private 
-    * @param $departmentID
-    * @return $departmentQuery
+    * @param $divisionName
+    * @return $division
     */
-	private function getDepartmentByNameQuery($departmentName) {
-		$this->db->select('departmentName','divisionID','departmentID');
+	private function getDepartmentIDQuery($departmentName) {
+		$this->db->select('departmentID');
 		$this->db->from('rm_departments');
 		$this->db->where('departmentName', $departmentName);
+		
 		$departmentQuery = $this->db->get();
-		return $departmentQuery;
+		
+		if ($departmentQuery->num_rows() > 0) {
+			$result = $departmentQuery->row();
+			$department = $result->departmentID;  
+			
+			return $department;
+		}
 	}
 	
 	/**
