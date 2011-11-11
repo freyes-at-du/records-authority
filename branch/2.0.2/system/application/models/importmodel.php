@@ -107,21 +107,8 @@ class ImportModel extends CI_Model {
 		$fh = fopen($filePath, "r");
 		$result = "";
 		
-		$iteratorDiv = 0;
-		/*$this->db->select_max('divisionID');
-		$queryDiv = $this->db->get('rm_divisions');
-		foreach($queryDiv->result() as $row) {
-			$iteratorDiv = $row->divisionID;
-			echo $iteratorDiv . br();
-		}*/
-		
+		$iteratorDiv = 0;		
 		$iteratorDep = 0;
-		/*$this->db->select_max('departmentID');
-		$queryDep = $this->db->get('rm_departments');
-		foreach($queryDep->result() as $row) {
-			$iteratorDep = $row->departmentID;
-			echo $iteratorDep . br();
-		}*/
 		
 		$importDiv = array();
 		$importDep = array();
@@ -201,77 +188,6 @@ class ImportModel extends CI_Model {
 			return $result;
 		}
 	}
-	
-	/**
-	 * Parses data from csv file and imports it to the Departments
-	 * 
-	 * @access public
-	 * @param $filePath,$divisionName
-	 * @return $result
-	 */
-	public function csvDepImport($filePath,$divisionID) {
-		$this->load->model('LookUpTablesModel');
-		
-		//open file
-		ini_set('auto_detect_line_endings',TRUE);
-		$fh = fopen($filePath, "r");
-		$result = "";$this->load->model('LookUpTablesModel');
-		
-		//open file
-		ini_set('auto_detect_line_endings',TRUE);
-		$fh = fopen($filePath, "r");
-		$result = "";
-		
-		$this->db->select_max('departmentID');
-		$iteratorDep = $this->db->get('rm_departments');
-		
-		$importDep = array();
-		
-		//create department import array
-		for($info = fgetcsv($fh,4096); !feof($fh); $info = fgetcsv($fh,4096)) {
-			if(isset($info[0]) && isset($info[1]) && $info[0] != "" && $info[1] != "") {
-				$divisionQuery = $this->LookUpTablesModel->getDivisionByName($info[0]);
-				if($department = "") {
-					foreach($divisionQuery as $division) {
-						$departments = array(
-							'departmentName'	=>	$info[1],
-							'divisionID'		=>	$divisionID,
-							'departmentID'		=>	$iteratorDep,
-						);
-					}
-					$importDep[$iteratorDep] = $departments;
-					$iteratorDep += 1;
-				}
-			}
-		}
-		
-		//insert department array
-		foreach($importDep as $import) {
-			$this->db->select('departmentName');
-			$this->db->from('rm_departments');
-			$this->db->where('departmentName', $import['departmentName']);
-			$nameCheck = $this->db->get();
-			if($nameCheck->num_rows() > 0) {
-				foreach($nameCheck->result() as $row) {
-					$result .= "Duplicate Department " . $row->departmentName . br();
-					$error = "Duplicate Department " . $row->departmentName;
-					log_message('info',$error);
-				}
-			} else {
-				//$this->db->insert('rm_departments', $import);
-				$result .= "Inserted " . $import['departmentName'] . br();
-			}
-		}
-		//close file
-		fclose($fh);
-		if($result == "") {
-			$result = "Import CSV was faulty!  Check for line breaks and extra commas.";
-			return $result;
-		} else {
-			return $result;
-		}
-	}
-	
 
 	/**
     * gets files in the upload directory
