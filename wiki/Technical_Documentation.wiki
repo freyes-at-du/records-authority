@@ -84,7 +84,10 @@
   * Stopping Jetty
   *   Enter *`“ps aux | grep solr”`*
    *  Find the _pid_ of the solr instance and enter `kill pid` (super user may be required)
-
+ * ===Dashboard===
+  * Login into the dashboard to continue configuration by clicking the version number on any page.
+  * Username default: admin
+  * Password default: admin
 ==Records Management Database==
  * The records management database is a MySQL based storage system for the RecordsAuthority application
  ===Table Descriptions===
