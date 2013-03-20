@@ -1,0 +1,27 @@
+body {
+    width: 95%;
+    margin: 1em auto 0;
+}
+#skipLink {
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+}
+form > ul, footer ul, nav section > ul {
+    list-style: none;
+    padding-left: 0;
+}
+footer li {
+    display: inline;
+}
+nav {
+    display: inline-block;
+    width: 17%;
+    padding: 2% 3%;
+}
+#rightContent {
+    display: inline-block;
+    padding: 2% 3% 3% 5%;
+    width: 68%;
+    vertical-align: top;
+}

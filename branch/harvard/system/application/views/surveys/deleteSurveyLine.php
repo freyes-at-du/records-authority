@@ -1,0 +1,1 @@
+$surveys .= "<li id='$results->surveyID'><a href='#' onClick='return areYouSure($results->surveyID);'>[Delete]</a>&nbsp;&nbsp;&nbsp;&nbsp;" . anchor("dashboard/addSurveyQuestions/$results->surveyID", trim(strip_tags($results->surveyName))) . "</li><br />";	
